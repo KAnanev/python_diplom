@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="da44cc9c-306c-4edc-b3a3-c33578595902" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="ROOT_SYNC" value="DONT_SYNC" />
+  </component>
+  <component name="IgnoredFileRootStore">
+    <option name="generatedRoots">
+      <set>
+        <option value="C:\Users\russr\PycharmProjects\python_diplom\.idea" />
+      </set>
+    </option>
+  </component>
+  <component name="ProjectId" id="1ZbfxHa0Zobbnfh9WzLeNTwURTe" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="settings.editor.selected.configurable" value="vcs.Git" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="da44cc9c-306c-4edc-b3a3-c33578595902" name="Default Changelist" comment="" />
+      <created>1585112958382</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1585112958382</updated>
+    </task>
+    <task id="LOCAL-00001" summary="commit">
+      <created>1585116024116</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1585116024116</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
+    <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="commit" />
+    <option name="LAST_COMMIT_MESSAGE" value="commit" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="934" y="336" key="CommitChangelistDialog2" timestamp="1585116023422">
+      <screen x="0" y="40" width="2560" height="1400" />
+    </state>
+    <state x="934" y="336" key="CommitChangelistDialog2/0.40.2560.1400@0.40.2560.1400" timestamp="1585116023422" />
+    <state x="1060" y="494" key="FileChooserDialogImpl" timestamp="1585113036983">
+      <screen x="0" y="40" width="2560" height="1400" />
+    </state>
+    <state x="1060" y="494" key="FileChooserDialogImpl/0.40.2560.1400@0.40.2560.1400" timestamp="1585113036983" />
+    <state x="975" y="563" key="com.intellij.ide.util.TipDialog" timestamp="1585113065345">
+      <screen x="0" y="40" width="2560" height="1400" />
+    </state>
+    <state x="975" y="563" key="com.intellij.ide.util.TipDialog/0.40.2560.1400@0.40.2560.1400" timestamp="1585113065345" />
+    <state x="1054" y="531" key="git4idea.merge.GitMergeDialog" timestamp="1585115962350">
+      <screen x="0" y="40" width="2560" height="1400" />
+    </state>
+    <state x="1054" y="531" key="git4idea.merge.GitMergeDialog/0.40.2560.1400@0.40.2560.1400" timestamp="1585115962350" />
+    <state x="991" y="531" key="git4idea.merge.GitPullDialog" timestamp="1585116041161">
+      <screen x="0" y="40" width="2560" height="1400" />
+    </state>
+    <state x="991" y="531" key="git4idea.merge.GitPullDialog/0.40.2560.1400@0.40.2560.1400" timestamp="1585116041161" />
+  </component>
+</project>
