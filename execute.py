@@ -12,32 +12,31 @@ GET_URL = 'https://api.vk.com/method/'
 # print(response_friends.json())
 
 
-# response = requests.post(f'{GET_URL}/execute',
-#                          params={
-#                              'code': 'return API.groups.get({"user_id": API.friends.get({"user_id": "577250478"})'
-#                                      '@.items}).items;',
-#                              'access_token': API_TOKEN,
-#                              'v': '5.103'
-#                          })
-# group = response.json()
-# print(group)
+response = requests.post(f'{GET_URL}/execute',
+                         params={
+                             'code': 'return [API.groups.get({"user_id": "171691064"}).items, API.groups.get({"user_id": API.friends.get({"user_id": "171691064"})@.items}).items];',
+                             'access_token': API_TOKEN,
+                             'v': '5.103'
+                         })
+user_groups = set(response.json()['response'][0])
+friends_groups = set(response.json()['response'][1])
+print(user_groups.difference(friends_groups))
 
-response_group = requests.post(f'{GET_URL}/execute',
-                               params={
-                                   'code': 'return API.friends.get({"user_id": "577250478"}).items;',
-                                   'access_token': API_TOKEN,
-                                   'v': '5.103'
-                               })
-list_friend = response_group.json()['response']
-
-for i
-
-response_group = requests.post(f'{GET_URL}/execute',
-                               params={
-                                   'code': 'return API.groups.get({"user_id": "7688771"}).items;',
-                                   'access_token': API_TOKEN,
-                                   'v': '5.103'
-                               })
-print(response_group.json())
+# response_group = requests.post(f'{GET_URL}/execute',
+#                                params={
+#                                    'code': 'return API.friends.get({"user_id": "577250478"}).items;',
+#                                    'access_token': API_TOKEN,
+#                                    'v': '5.103'
+#                                })
+# list_friend = response_group.json()['response']
+# print(list_friend)
+#
+# response_group = requests.post(f'{GET_URL}/execute',
+#                                params={
+#                                    'code': 'return API.groups.get({"user_id": "2178068"}).items;',
+#                                    'access_token': API_TOKEN,
+#                                    'v': '5.103'
+#                                })
+# print(response_group.json())
 
 
