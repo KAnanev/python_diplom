@@ -78,5 +78,8 @@
       <screen x="0" y="40" width="2560" height="1400" />
     </state>
     <state x="991" y="531" key="git4idea.merge.GitPullDialog/0.40.2560.1400@0.40.2560.1400" timestamp="1585116041161" />
+  <component name="ProjectId" id="1ZFiTeu5kQjgoOFGR1AiueLzl98" />
+  <component name="PropertiesComponent">
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
 </project>
