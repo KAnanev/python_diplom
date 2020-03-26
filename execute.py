@@ -1,6 +1,7 @@
 import requests
 import time
-from pprint import pprint
+import json
+
 API_TOKEN = '73eaea320bdc0d3299faa475c196cfea1c4df9da4c6d291633f9fe8f83c08c4de2a3abf89fbc3ed8a44e1'
 GET_URL = 'https://api.vk.com/method/'
 USER_ID = '171691064'
@@ -13,7 +14,7 @@ def get_req(execute, user_id):
                                 'access_token': API_TOKEN,
                                 'v': '5.103'
                             })
-    print('|', end='.'),
+    print('|', end='')
     return res
 
 
@@ -38,14 +39,21 @@ def get_gr(execute, list_groups):
     time.sleep(3)
     res = requests.post(f'{GET_URL}/execute',
                         params={
-                                'code': 'return ' + execute + '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
+                                'code': 'return ' + execute +
+                                        '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
                                 'access_token': API_TOKEN,
                                 'v': '5.103'
                             })
-    print('|', end='.'),
-    pprint(res.json())
+    print('|', end='')
+    list_end_groups = []
+    for item in res.json()['response']:
+        list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
+    with open('groups.json', 'w') as f:
+        f.write(json.dumps(list_end_groups, ensure_ascii=False))
 
 
 get_gr('API.groups.getById', groups)
+
+print('\n Процесс завершён')
 
 
