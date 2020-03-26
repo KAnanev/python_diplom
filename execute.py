@@ -4,13 +4,25 @@ import json
 
 API_TOKEN = '73eaea320bdc0d3299faa475c196cfea1c4df9da4c6d291633f9fe8f83c08c4de2a3abf89fbc3ed8a44e1'
 GET_URL = 'https://api.vk.com/method/'
-USER_ID = '171691064'
+user_id = '171691064'
+
+if isinstance(user_id, str):
+    response = requests.get(
+        'https://api.vk.com/method/users.get',
+        params={
+            'access_token': API_TOKEN,
+            'user_ids': user_id,
+            'v': '5.103'
+        })
+    user_id = response.json()['response'][0]['id']
+else:
+    user_id = user_id
 
 
-def get_req(execute, user_id):
+def get_req(execute, user):
     res = requests.post(f'{GET_URL}/execute',
                         params={
-                                'code': 'return ' + execute + '({"user_id": "' + user_id + '"}).items;',
+                                'code': 'return ' + execute + '({"user_id": "' + str(user) + '"}).items;',
                                 'access_token': API_TOKEN,
                                 'v': '5.103'
                             })
@@ -18,8 +30,8 @@ def get_req(execute, user_id):
     return res
 
 
-list_friends = get_req('API.friends.get', USER_ID).json()['response']
-list_groups_user = get_req('API.groups.get', USER_ID).json()['response']
+list_friends = get_req('API.friends.get', user_id).json()['response']
+list_groups_user = get_req('API.groups.get', user_id).json()['response']
 
 list_groups_friends = []
 
