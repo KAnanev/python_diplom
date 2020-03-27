@@ -32,40 +32,40 @@ def get_req(execute, user):
 
 list_friends = get_req('API.friends.get', user_id).json()['response']
 list_groups_user = get_req('API.groups.get', user_id).json()['response']
-
-list_groups_friends = []
-
-for i in list_friends:
-    try:
-        response = get_req('API.groups.get', str(i)).json()['response']
-        if isinstance(response, list):
-            list_groups_friends.extend(response)
-    except KeyError:
-        pass
-user_groups = set(list_groups_user)
-friends_groups = set(list_groups_friends)
-groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
-
-
-def get_gr(execute, list_groups):
-    time.sleep(3)
-    res = requests.post(f'{GET_URL}/execute',
-                        params={
-                                'code': 'return ' + execute +
-                                        '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
-                                'access_token': API_TOKEN,
-                                'v': '5.103'
-                            })
-    print('|', end='')
-    list_end_groups = []
-    for item in res.json()['response']:
-        list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
-    with open('groups.json', 'w') as f:
-        f.write(json.dumps(list_end_groups, ensure_ascii=False))
-
-
-get_gr('API.groups.getById', groups)
-
-print('\n Процесс завершён')
+print(list_friends)
+# list_groups_friends = []
+#
+# for i in list_friends:
+#     try:
+#         response = get_req('API.groups.get', str(i)).json()['response']
+#         if isinstance(response, list):
+#             list_groups_friends.extend(response)
+#     except KeyError:
+#         pass
+# user_groups = set(list_groups_user)
+# friends_groups = set(list_groups_friends)
+# groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
+#
+#
+# def get_gr(execute, list_groups):
+#     time.sleep(3)
+#     res = requests.post(f'{GET_URL}/execute',
+#                         params={
+#                                 'code': 'return ' + execute +
+#                                         '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
+#                                 'access_token': API_TOKEN,
+#                                 'v': '5.103'
+#                             })
+#     print('|', end='')
+#     list_end_groups = []
+#     for item in res.json()['response']:
+#         list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
+#     with open('groups.json', 'w') as f:
+#         f.write(json.dumps(list_end_groups, ensure_ascii=False))
+#
+#
+# get_gr('API.groups.getById', groups)
+#
+# print('\n Процесс завершён')
 
 
