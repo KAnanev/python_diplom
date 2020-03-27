@@ -32,7 +32,7 @@ def get_req(execute, user):
 
 list_friends = get_req('API.friends.get', user_id).json()['response']
 list_groups_user = get_req('API.groups.get', user_id).json()['response']
-print(list_friends)
+print(list_groups_user)
 # list_groups_friends = []
 #
 # for i in list_friends:

@@ -1,27 +1,37 @@
 import requests
+import time
+import json
 
 API_TOKEN = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 GET_URL = 'https://api.vk.com/method/'
+user_id = '171691064'
 
-list_friends = [4929, 7858, 11952, 48807, 58439, 71491, 75458, 78540, 105932, 143611, 144253, 193264, 209254, 214895,
-                317799, 659299, 659436, 662584, 666429, 692250, 768496, 787463, 788652, 855521, 911031, 913182, 999522,
-                1134398, 1159156, 1246368, 1339341, 1367530, 1440049, 1471450, 1646659, 1763623, 1766644, 1809780,
-                2062117, 2086139, 2090146, 2355318, 2367567, 2456344, 2559236, 2562369, 2567331, 2657088, 2705957,
-                2711121, 2752341, 2809629, 2912707, 3076020, 3551352, 3563036, 3636234, 3858793, 4496267, 5030613,
-                5165523, 5527094, 5561531, 5727022, 6099111, 6152449, 6215299, 6334999, 6433503, 6821814, 6824015,
-                7776415, 7786450, 7840937, 8219833, 9470247, 9509695, 9764801, 9889116, 10684633, 10875152, 11364269,
-                11479238, 11986689, 12941980, 13122477, 13146165, 13335254, 13763476, 14230616, 14550543, 14704667,
-                15164302, 15258454, 15431923, 15973376, 16232197, 16244955, 16599580, 16761062, 16892193, 17488975,
-                17650760, 17962268, 18062307, 18196828, 18538931, 19832321, 20272794, 20488230, 20927618, 21198190,
-                21283573, 21344007, 22879376, 23309500, 25598114, 26274755, 29839870, 32353261, 32744834, 33728375,
-                33769451, 41016241, 41475773, 42609976, 44791055, 46298639, 46370315, 46680193, 47219972, 47255626,
-                48102502, 49396083, 52262270, 52612027, 54632388, 57052402, 58798893, 59648648, 62063198, 62933544,
-                64626974, 65081354, 65359751, 77862315, 79101880, 83654550, 85184665, 88305738, 88359019, 93179895,
-                97172348, 109144582, 110553958, 128251264, 132411195, 135282071, 142965761, 152062439, 152746319,
-                155686070, 161468248, 163954112, 171917250, 173110550, 173884854, 175707944, 178950262, 184688820,
-                193126555, 194663561, 208537381, 221740169, 223235705, 227029485, 229416595, 231842339, 237468206,
-                252091764, 255838606, 274945452, 283037583, 300349200, 340887494, 379188930, 401466040, 404486650,
-                434109816, 437280430, 455801942, 462483827, 561822759]
+if isinstance(user_id, str):
+    response = requests.get(
+        'https://api.vk.com/method/users.get',
+        params={
+            'access_token': API_TOKEN,
+            'user_ids': user_id,
+            'v': '5.103'
+        })
+    user_id = response.json()['response'][0]['id']
+else:
+    user_id = user_id
+
+
+def get_req(execute, user):
+    res = requests.post(f'{GET_URL}/execute',
+                        params={
+                                'code': 'return ' + execute + '({"user_id": "' + str(user) + '"}).items;',
+                                'access_token': API_TOKEN,
+                                'v': '5.103'
+                            })
+    print('|', end='')
+    return res
+
+
+list_friends = get_req('API.friends.get', user_id).json()['response']
+list_groups_user = get_req('API.groups.get', user_id).json()['response']
 
 
 def list_in_req(list_id):
@@ -31,13 +41,41 @@ def list_in_req(list_id):
     return list_req
 
 
+list_groups_friends = []
+time.sleep(0.0001)
 for i in range(0, len(list_friends), 25):
     response = requests.post(f'{GET_URL}/execute',
                              params={
-                                 'code': 'return ' + list_in_req(list_friends[i: i + 25]) + ';',
+                                 'code': 'return [' + ', '.join(str(i) for i in list_in_req(list_friends[i: i + 25])) + '];',
                                  'access_token': API_TOKEN,
                                  'v': '5.103'
                              })
+    print('|', end='')
+    for item in response.json()['response']:
+        if isinstance(item, list):
+            list_groups_friends.extend(item)
 
-    print(response.json())
+user_groups = set(list_groups_user)
+friends_groups = set(list_groups_friends)
+groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
 
+
+def get_gr(execute, list_groups):
+    res = requests.post(f'{GET_URL}/execute',
+                        params={
+                                'code': 'return ' + execute +
+                                        '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
+                                'access_token': API_TOKEN,
+                                'v': '5.103'
+                            })
+    print('|', end='')
+    list_end_groups = []
+    for item in res.json()['response']:
+        list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
+    with open('groups.json', 'w') as f:
+        f.write(json.dumps(list_end_groups, ensure_ascii=False))
+
+
+get_gr('API.groups.getById', groups)
+
+print('\n Процесс завершён')
