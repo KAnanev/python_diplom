@@ -2,7 +2,7 @@ import requests
 import time
 import json
 
-API_TOKEN = '73eaea320bdc0d3299faa475c196cfea1c4df9da4c6d291633f9fe8f83c08c4de2a3abf89fbc3ed8a44e1'
+API_TOKEN = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 GET_URL = 'https://api.vk.com/method/'
 user_id = '171691064'
 
