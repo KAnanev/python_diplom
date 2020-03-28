@@ -1,10 +1,9 @@
 import requests
+import json
+import time
 
-API_TOKEN = '73eaea320bdc0d3299faa475c196cfea1c4df9da4c6d291633f9fe8f83c08c4de2a3abf89fbc3ed8a44e1'
+API_TOKEN = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
 GET_URL = 'https://api.vk.com/method/'
-
-user = 'eshmargunov'
-list_users = []
 
 
 class User:
@@ -18,39 +17,66 @@ class User:
                     'user_ids': user_id,
                     'v': '5.103'
                 })
-            self.user_id = response.json()['response'][0]['id']
+            self.user_id = str(response.json()['response'][0]['id'])
         else:
             self.user_id = user_id
 
-    def __str__(self):
-        return str(self.user_id)
-
-    def get_only_my_groups(self):
+    def get_user_data(self, value):
         response = requests.post(f'{GET_URL}/execute',
                                  params={
-                                     'code': 'return [API.groups.get({"user_id": "' + str(self.user_id) + '"}).items, '
-                                                                                                          'API.groups.get({"user_id": API.friends.get'
-                                                                                                          '({"user_id": "' + str(
-                                         self.user_id) + '"})@.items}).items];',
+                                     'code': 'return API.' + value + '.get({"user_id": "' + obj_user.user_id + '"}).items;',
                                      'access_token': API_TOKEN,
                                      'v': '5.103'
                                  })
-        user_groups = set(response.json()['response'][0])
-        friends_groups = set(response.json()['response'][1])
-        return user_groups.difference(friends_groups)
+        print('|', end='')
+        return response.json()['response']
 
-    def get_group_info(self, id_group):
-        if not isinstance(id_group, list):
-            id_group = ', '.join(str(i) for i in list(id_group))
-            print(id_group)
-        # for i in id_group:
-        #     response = requests.post(f'{GET_URL}/execute',
-        #                              params={
-        #                                  'code': 'return [API.groups.get().items;',
-        #                                  'access_token': API_TOKEN,
-        #                                  'v': '5.103'
-        #                              })
+    def get_friends_group(self, list_friends):
+        list_groups_friends = []
+        for i in range(0, len(list_friends), 25):
+            try:
+                response = requests.post(f'{GET_URL}/execute',
+                                         params={
+                                             'code': 'return [' + ', '.join(
+                                                 ['API.groups.get({"user_id": "' + str(i) + '"}).items' for i in
+                                                  list_friends[i: i + 25]]) + '];',
+                                             'access_token': API_TOKEN,
+                                             'v': '5.103'
+                                         })
+                print(response.json())
+                for item in response.json()['response']:
+                    if isinstance(item, list):
+                        list_groups_friends.extend(item)
+            except KeyError:
+                print('error')
+                time.sleep(0.1)
+                raise
 
 
-obj_user = User(user)
-obj_user.get_group_info(obj_user.get_only_my_groups())
+
+        return list_groups_friends
+
+    def get_unique_groups(self, user_groups, friends_groups):
+        user_groups = set(user_groups)
+        friends_groups = set(friends_groups)
+        unique_groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
+        res = requests.post(f'{GET_URL}/execute',
+                            params={
+                                'code': 'return API.groups.getById'
+                                        '({"group_ids": "' + unique_groups + '", "fields": "members_count"});',
+                                'access_token': API_TOKEN,
+                                'v': '5.103'
+                            })
+        list_end_groups = []
+        for item in res.json()['response']:
+            list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
+        with open('groups.json', 'w') as f:
+            f.write(json.dumps(list_end_groups, ensure_ascii=False))
+
+
+obj_user = User('171691064')
+friends = obj_user.get_user_data('friends')
+groups = obj_user.get_user_data('groups')
+friends_groups = obj_user.get_friends_group(friends)
+print(friends_groups)
+# obj_user.get_unique_groups(groups, friends_groups)

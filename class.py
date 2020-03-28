@@ -44,31 +44,37 @@ def list_in_req(list_id):
 list_groups_friends = []
 time.sleep(0.0001)
 for i in range(0, len(list_friends), 25):
-    response = requests.post(f'{GET_URL}/execute',
-                             params={
-                                 'code': 'return [' + ', '.join(str(i) for i in list_in_req(list_friends[i: i + 25])) + '];',
-                                 'access_token': API_TOKEN,
-                                 'v': '5.103'
-                             })
-    print('|', end='')
-    for item in response.json()['response']:
-        if isinstance(item, list):
-            list_groups_friends.extend(item)
+    try:
+        response = requests.post(f'{GET_URL}/execute',
+                                 params={
+                                     'code': 'return [' + ', '.join(
+                                         str(i) for i in list_in_req(list_friends[i: i + 25])) + '];',
+                                     'access_token': API_TOKEN,
+                                     'v': '5.103'
+                                 })
+        print('|', end='')
+        for item in response.json()['response']:
+            if isinstance(item, list):
+                list_groups_friends.extend(item)
+    except KeyError:
+        time.sleep(1)
+        raise
 
 user_groups = set(list_groups_user)
 friends_groups = set(list_groups_friends)
 groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
 
 
-def get_gr(execute, list_groups):
+def get_gr(user_groups, friends_groups):
+    user_groups = set(list_groups_user)
+    friends_groups = set(list_groups_friends)
+    unique_groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
     res = requests.post(f'{GET_URL}/execute',
                         params={
-                                'code': 'return ' + execute +
-                                        '({"group_ids": "' + list_groups + '", "fields": "members_count"});',
+                                'code': 'return API.groups.getById({"group_ids": "' + unique_groups + '", "fields": "members_count"});',
                                 'access_token': API_TOKEN,
                                 'v': '5.103'
                             })
-    print('|', end='')
     list_end_groups = []
     for item in res.json()['response']:
         list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
