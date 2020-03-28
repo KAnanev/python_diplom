@@ -7,9 +7,14 @@ API_TOKEN = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56
 GET_URL = 'https://api.vk.com/method/'
 
 
+def print_slash():
+    print('|', end='')
+
+
 class User:
 
     def __init__(self, user_id):
+        """Инициализирует атрибут user_id"""
         if isinstance(user_id, str):
             response = requests.get(
                 'https://api.vk.com/method/users.get',
@@ -18,24 +23,24 @@ class User:
                     'user_ids': user_id,
                     'v': '5.103'
                 })
+            print_slash()
             self.user_id = str(response.json()['response'][0]['id'])
         else:
             self.user_id = user_id
 
-    def print_slash(self):
-        print('|', end='')
-
     def get_user_data(self, value):
+        """Функция запроса получения данных пользователя"""
         response = requests.post(f'{GET_URL}/execute',
                                  params={
                                      'code': 'return API.' + value + '.get({"user_id": "' + obj_user.user_id + '"}).items;',
                                      'access_token': API_TOKEN,
                                      'v': '5.103'
                                  })
-        obj_user.print_slash()
+        print_slash()
         return response.json()['response']
 
     def get_friends_group(self, list_friends):
+        """Функция получает список друзуй, формирует запрос, возвращает список групп друзей"""
         list_groups_friends = []
         count = 0
         for i in range(0, len(list_friends), 25):
@@ -47,7 +52,7 @@ class User:
                                          'access_token': API_TOKEN,
                                          'v': '5.103'
                                      })
-            obj_user.print_slash()
+            print_slash()
             count += 1
             if count == 3:
                 time.sleep(1)
@@ -59,6 +64,7 @@ class User:
         return list_groups_friends
 
     def get_unique_groups(self, user_groups, friends_groups):
+        """Функция получает список групп пользователя и список групп друзей, выводит уникальные группы"""
         user_groups = set(user_groups)
         friends_groups = set(friends_groups)
         unique_groups = ', '.join(str(i) for i in list(user_groups.difference(friends_groups)))
@@ -69,7 +75,7 @@ class User:
                                 'access_token': API_TOKEN,
                                 'v': '5.103'
                             })
-        obj_user.print_slash()
+        print_slash()
         list_end_groups = []
         for item in res.json()['response']:
             list_end_groups.append({'name': item['name'], 'gid': item['id'], 'members_count': item['members_count']})
