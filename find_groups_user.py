@@ -1,3 +1,4 @@
+# -*- coding: utf8 -*-
 import requests
 import json
 import time
@@ -76,7 +77,7 @@ class User:
             f.write(json.dumps(list_end_groups, ensure_ascii=False))
 
 
-obj_user = User('171691064')
+obj_user = User(input("Введите id пользователя: "))
 friends = obj_user.get_user_data('friends')
 groups = obj_user.get_user_data('groups')
 friends_groups = obj_user.get_friends_group(friends)
