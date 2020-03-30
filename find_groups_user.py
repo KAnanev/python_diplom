@@ -3,7 +3,7 @@ import requests
 import json
 import time
 
-API_TOKEN = '958eb5d439726565e9333aa30e50e0f937ee432e927f0dbd541c541887d919a7c56f95c04217915c32008'
+API_TOKEN = 'token'
 GET_URL = 'https://api.vk.com/method/'
 
 
@@ -13,8 +13,8 @@ def print_slash():
 
 class User:
 
-    def __init__(self, user_id):
-        """Инициализирует атрибут user_id"""
+    def __init__(self, user_id, api_token):
+        """Инициализирует атрибут user_id и токен vk"""
         if isinstance(user_id, str):
             response = requests.get(
                 'https://api.vk.com/method/users.get',
@@ -83,8 +83,10 @@ class User:
             f.write(json.dumps(list_end_groups, ensure_ascii=False))
 
 
-obj_user = User(input("Введите id пользователя: "))
-friends = obj_user.get_user_data('friends')
-groups = obj_user.get_user_data('groups')
-friends_groups = obj_user.get_friends_group(friends)
-obj_user.get_unique_groups(groups, friends_groups)
+if __name__ == '__main__':
+    obj_user = User(input("Введите id пользователя: "))
+    friends = obj_user.get_user_data('friends')
+    groups = obj_user.get_user_data('groups')
+    friends_groups = obj_user.get_friends_group(friends)
+    obj_user.get_unique_groups(groups, friends_groups)
+
